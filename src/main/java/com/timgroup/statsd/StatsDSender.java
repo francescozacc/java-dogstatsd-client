@@ -4,12 +4,8 @@ import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
-import java.nio.charset.Charset;
-
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,6 +50,7 @@ public class StatsDSender implements Runnable {
     StatsDSender(final Callable<SocketAddress> addressLookup, final DatagramChannel clientChannel,
                  final StatsDClientErrorHandler handler, BufferPool pool, BlockingQueue<ByteBuffer> buffers) throws Exception {
         this(addressLookup, clientChannel, handler, pool, buffers, DEFAULT_WORKERS);
+
     }
 
     @Override
