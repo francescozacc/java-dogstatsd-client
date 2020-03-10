@@ -521,24 +521,6 @@ public class NonBlockingStatsDClient implements StatsDClient {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void recordGaugeValue(final String aspect, final double value, final double sampleRate, final String... tags) {
-        if (isInvalidSample(sampleRate)) {
-            return;
-        }
-        send(new StringBuilder(prefix)
-                .append(aspect)
-                .append(":")
-                .append(NUMBER_FORMATTERS.get().format(value))
-                .append("|g|@")
-                .append(SAMPLE_RATE_FORMATTERS.get().format(sampleRate))
-                .append(tagString(tags))
-                .toString());
-    }
-
-    /**
      * Records the latest fixed value for the specified named gauge.
      *
      * <p>This method is non-blocking and is guaranteed not to throw an exception.</p>
@@ -704,6 +686,22 @@ public class NonBlockingStatsDClient implements StatsDClient {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void histogram(String aspect, double value, String... tags){
+        recordHistogramValue(aspect, value, tags);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void histogram(String aspect, double value, double sampleRate, String... tags){
+        recordHistogramValue(aspect, value, sampleRate, tags);
+    }
+
+    /**
      * Records a value for the specified named distribution.
      *
      * <p>This method is non-blocking and is guaranteed not to throw an exception.</p>
@@ -770,6 +768,22 @@ public class NonBlockingStatsDClient implements StatsDClient {
      */
     @Override
     public void distribution(final String aspect, final long value, final double sampleRate, final String... tags) {
+        recordDistributionValue(aspect, value, sampleRate, tags);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void distribution(String aspect, double value, String... tags){
+        recordDistributionValue(aspect, value, tags);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void distribution(String aspect, double value, double sampleRate, String... tags){
         recordDistributionValue(aspect, value, sampleRate, tags);
     }
 
