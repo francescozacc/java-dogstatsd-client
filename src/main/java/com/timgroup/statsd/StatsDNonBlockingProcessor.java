@@ -102,11 +102,9 @@ public class StatsDNonBlockingProcessor extends StatsDProcessor {
     @Override
     boolean send(final String message) {
         if (!shutdown) {
-            long threadId = Thread.currentThread().getId();
-            // modulo reduction alternative to: long shard = threadID % [shard]this.lockShardGrain;
-            // ref: https://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
-            int shard = (int)((threadId * (long)this.lockShardGrain) >> 32);
-            int processQueue = (int)((threadId * (long)this.workers) >> 32);
+            int threadId = getThreadId();
+            int shard = threadId % lockShardGrain;
+            int processQueue = threadId % workers;
 
             if (qsize[shard].get() < qcapacity) {
                 messages[shard].offer(message);
